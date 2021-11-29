@@ -3,9 +3,7 @@ package com.omisoft.myapplication.mvp
 import android.os.Handler
 import android.os.Looper
 
-class MvpPresenter(private val view: MvpView) {
-
-    private val authModel = MvpAuthModelImpl()
+class MvpPresenter(private val view: MvpView, private val authModel: MvpAuthModel) {
 
     fun onLoginClicked(email: String, password: String) {
         Handler(Looper.getMainLooper()).postDelayed({

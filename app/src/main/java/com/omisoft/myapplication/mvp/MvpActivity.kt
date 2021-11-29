@@ -14,11 +14,11 @@ import com.omisoft.myapplication.R
 import com.omisoft.myapplication.success.SuccessActivity
 
 class MvpActivity : AppCompatActivity(), MvpView {
-   private lateinit var progress: ProgressBar
-   private lateinit var overlay: FrameLayout
-   private var testText: AppCompatTextView? = null
+    private lateinit var progress: ProgressBar
+    private lateinit var overlay: FrameLayout
+    private var testText: AppCompatTextView? = null
 
-    private val presenter: MvpPresenter = MvpPresenter(this)
+    private val presenter: MvpPresenter = MvpPresenter(this, MvpAuthModelImpl())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class MvpActivity : AppCompatActivity(), MvpView {
     }
 
     override fun updateText() {
-        testText!!.text = "Updated"
+        testText?.text = "Updated"
     }
 
     override fun onStop() {

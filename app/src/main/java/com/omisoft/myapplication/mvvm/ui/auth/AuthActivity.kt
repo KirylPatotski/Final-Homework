@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm
+package com.omisoft.myapplication.mvvm.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,19 +12,19 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.success.SuccessActivity
+import com.omisoft.myapplication.mvvm.ui.countries.CountriesActivity
 
 
-class MvvmActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
     private lateinit var progress: ProgressBar
     private lateinit var overlay: FrameLayout
-    private lateinit var viewModel: MvvmViewModel
+    private lateinit var viewModel: AuthViewModel
     private var titleText: AppCompatTextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mvp)
-        viewModel = ViewModelProvider(this)[MvvmViewModel::class.java]
+        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         val buttonLogin: AppCompatButton = findViewById(R.id.button_login)
         val loginField: TextInputLayout = findViewById(R.id.input_layout_login)
@@ -40,11 +40,13 @@ class MvvmActivity : AppCompatActivity() {
         }
 
         subscribeOnLiveData()
+
+
     }
 
     private fun subscribeOnLiveData() {
         viewModel.isLoginSuccessLiveData.observe(this, {
-            val intent = Intent(this, SuccessActivity::class.java)
+            val intent = Intent(this, CountriesActivity::class.java)
             startActivity(intent)
         })
         viewModel.isLoginFailedLiveData.observe(this, {

@@ -1,18 +1,23 @@
-package com.omisoft.myapplication.mvvm
+package com.omisoft.myapplication.mvvm.ui.auth
 
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.omisoft.myapplication.mvvm.model.network.NetworkAuthService
+import com.omisoft.myapplication.mvvm.model.network.NetworkAuthServiceImpl
+import com.omisoft.myapplication.mvvm.model.storage.LocalStorageModel
+import com.omisoft.myapplication.mvvm.model.storage.UserStorage
 
-class MvvmViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
     val isLoginSuccessLiveData = MutableLiveData<Unit>()
     val isLoginFailedLiveData = MutableLiveData<Unit>()
     val showProgressLiveData = MutableLiveData<Unit>()
     val hideProgressLiveData = MutableLiveData<Unit>()
     val titleLiveData = MutableLiveData<String>()
 
-    private val authModel = MvvmAuthModel()
+    private val authModel: NetworkAuthService = NetworkAuthServiceImpl()
+    private val storageModel: UserStorage = LocalStorageModel()
 
     fun onLoginClicked(email: String, password: String) {
 //      Сообщаем нашему view, в нашем случае MvvmActivity, что нужно показать прогресс
@@ -22,11 +27,12 @@ class MvvmViewModel : ViewModel() {
 //      Это мы делаем штучно, на самом деле штучную задержку делать не надо)
         Handler(Looper.getMainLooper()).postDelayed({
 //          titleLiveData.postValue("Main Page")
-            val isSuccess = authModel.onLoginClicked(email, password)
+            val token = authModel.onLoginClicked(email, password)
 
 //      Сообщаем нашему view, в нашем случае MvvmActivity, что нужно спрятать прогресс
             hideProgressLiveData.postValue(Unit)
-            if (isSuccess) {
+            if (token != null) {
+                storageModel.saveToken(token)
                 isLoginSuccessLiveData.postValue(Unit)
             } else {
                 isLoginFailedLiveData.postValue(Unit)
