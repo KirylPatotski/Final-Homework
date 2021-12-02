@@ -16,6 +16,9 @@ class AuthViewModel : ViewModel() {
     val hideProgressLiveData = MutableLiveData<Unit>()
     val titleLiveData = MutableLiveData<String>()
 
+    val emailLiveData = MutableLiveData<String>()
+    val passwordLiveData = MutableLiveData<String>()
+
     private val authModel: NetworkAuthService = NetworkAuthServiceImpl()
     private val storageModel: UserStorage = LocalStorageModel()
 

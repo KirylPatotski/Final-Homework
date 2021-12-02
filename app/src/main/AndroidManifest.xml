@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".mvvm.ui.auth.AuthActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             android:name=".success.SuccessActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".mvvm.ui.countries.CountriesActivity"
+            android:name=".mvvm.ui.countries.activity.CountriesActivity"
             android:exported="true"></activity>
     </application>
 

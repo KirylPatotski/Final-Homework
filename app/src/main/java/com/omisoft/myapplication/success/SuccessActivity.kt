@@ -10,7 +10,7 @@ import com.omisoft.myapplication.R
 class SuccessActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_success)
+        setContentView(R.layout.layout_success)
 
         val successFlagImageView = findViewById<AppCompatImageView>(R.id.success_flag)
         val successMessageTextView = findViewById<TextView>(R.id.success_message)
