@@ -39,4 +39,9 @@ class CountriesViewModel : ViewModel(), LifecycleEventObserver {
         val countries = model.getCountries()
         countriesLiveData.value = countries
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        println("CLEARED")
+    }
 }

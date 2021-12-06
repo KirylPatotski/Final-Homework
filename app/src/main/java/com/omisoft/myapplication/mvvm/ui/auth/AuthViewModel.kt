@@ -2,6 +2,7 @@ package com.omisoft.myapplication.mvvm.ui.auth
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.omisoft.myapplication.mvvm.model.network.NetworkAuthService
@@ -9,7 +10,7 @@ import com.omisoft.myapplication.mvvm.model.network.NetworkAuthServiceImpl
 import com.omisoft.myapplication.mvvm.model.storage.LocalStorageModel
 import com.omisoft.myapplication.mvvm.model.storage.UserStorage
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel : ViewModel(), LifecycleObserver {
     val isLoginSuccessLiveData = MutableLiveData<Unit>()
     val isLoginFailedLiveData = MutableLiveData<Unit>()
     val showProgressLiveData = MutableLiveData<Unit>()
