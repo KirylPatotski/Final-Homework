@@ -28,7 +28,7 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_auth_mvvm)
+        setContentView(R.layout.layout_auth)
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         buttonLogin = findViewById(R.id.button_login)

@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
+import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.ListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         listenNavigationEvents()
-        openFragment(AuthFragment(), tag = "AuthFragment")
+
+        if (savedInstanceState == null) {
+            openFragment(ListFragment(), tag = "ListFragment")
+        }
     }
 
     fun openFragment(fragment: Fragment, doClearBackStack: Boolean = false, tag: String? = null) {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.os.bundleOf
@@ -13,14 +12,15 @@ import androidx.fragment.app.viewModels
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.ui.draft.browser.BrowserFragment
-import com.omisoft.myapplication.mvvm.ui.draft.countries.CountriesViewModel
+import com.omisoft.myapplication.mvvm.ui.draft.countries.ListViewModel
 import com.omisoft.myapplication.mvvm.ui.draft.filepicker.FilePickerFragment
 import com.omisoft.myapplication.success.SuccessFragment
 
-class CountriesFragment : Fragment() {
+class ListFragment : Fragment() {
 
-    private val viewModel by viewModels<CountriesViewModel>()
-    private lateinit var countriesListView: ListView
+    private val viewModel by viewModels<ListViewModel>()
+    private lateinit var albumsListView: ListView
+    private var adapter: AlbumsBaseAdapter? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,8 +36,8 @@ class CountriesFragment : Fragment() {
         )
 
         lifecycle.addObserver(viewModel)
+        albumsListView = view.findViewById(R.id.list_albums)
 
-        countriesListView = view.findViewById(R.id.list_countries)
         val openSuccessButton = view.findViewById<AppCompatButton>(R.id.open_success_button)
         val openUrlButton = view.findViewById<AppCompatButton>(R.id.open_url_button)
         val countriesOpenFilePicker = view.findViewById<AppCompatButton>(R.id.open_file_picker_button)
@@ -53,12 +53,24 @@ class CountriesFragment : Fragment() {
         }
 
         subscribeToLiveData()
+        setListeners()
+    }
+
+    private fun setListeners() {
+        albumsListView.setOnItemClickListener { _, _, position, _ ->
+            val selectedAlbum = adapter?.getItem(position)
+            println(selectedAlbum)
+        }
     }
 
     private fun subscribeToLiveData() {
-        viewModel.countriesLiveData.observe(viewLifecycleOwner, { countries ->
-            val adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, countries)
-            countriesListView.adapter = adapter
+        viewModel.countriesLiveData.observe(viewLifecycleOwner, { _ ->
+//            val adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, countries)
+//            albumsListView.adapter = adapter
+        })
+        viewModel.albumsLiveData.observe(viewLifecycleOwner, { albums ->
+            adapter = AlbumsBaseAdapter(albums, requireContext())
+            albumsListView.adapter = adapter
         })
     }
 

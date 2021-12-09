@@ -6,20 +6,20 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.mvvm.ui.draft.countries.CountriesViewModel
+import com.omisoft.myapplication.mvvm.ui.draft.countries.ListViewModel
 
 class CountriesActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CountriesViewModel
+    private lateinit var viewModel: ListViewModel
     private lateinit var countriesListView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_countries)
-        viewModel = ViewModelProvider(this)[CountriesViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ListViewModel::class.java]
         lifecycle.addObserver(viewModel)
 
-        countriesListView = findViewById(R.id.list_countries)
+        countriesListView = findViewById(R.id.list_albums)
         subscribeToLiveData()
     }
 

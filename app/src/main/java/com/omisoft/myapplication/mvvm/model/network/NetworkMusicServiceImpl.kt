@@ -4,7 +4,7 @@ import com.omisoft.myapplication.mvvm.model.entity.Album
 
 class NetworkMusicServiceImpl : NetworkMusicService {
 
-    val albums = listOf(
+    private val albums = listOf(
         Album("Dynamite", "https://lastfm.freetls.fastly.net/i/u/174s/41b15d8a0ad6a81323b598bfb19cede9.png"),
         Album("Dynamite (Extended)", "https://lastfm.freetls.fastly.net/i/u/174s/0e41a35afb8e2ad81aca9621d420a33f.png"),
         Album("Funk Wav Bounces Vol.1", "https://lastfm.freetls.fastly.net/i/u/174s/a552de6f9f15614d4da59ebf8cd7f5e2.png"),
@@ -21,6 +21,8 @@ class NetworkMusicServiceImpl : NetworkMusicService {
     override fun getFavouriteMusic(): List<Any> {
         TODO("Not yet implemented")
     }
+
+    override fun getAlbums(): List<Album> = albums
 
     override fun updateFavouriteMusic(data: Any) {
         TODO("Not yet implemented")
