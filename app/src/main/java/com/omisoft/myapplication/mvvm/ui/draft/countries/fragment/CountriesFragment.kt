@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.ui.countries.fragment
+package com.omisoft.myapplication.mvvm.ui.draft.countries.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.mvvm.ui.browser.BrowserFragment
-import com.omisoft.myapplication.mvvm.ui.countries.CountriesViewModel
-import com.omisoft.myapplication.mvvm.ui.filepicker.FilePickerFragment
+import com.omisoft.myapplication.mvvm.ui.draft.browser.BrowserFragment
+import com.omisoft.myapplication.mvvm.ui.draft.countries.CountriesViewModel
+import com.omisoft.myapplication.mvvm.ui.draft.filepicker.FilePickerFragment
 import com.omisoft.myapplication.success.SuccessFragment
 
 class CountriesFragment : Fragment() {

@@ -18,7 +18,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
-import com.omisoft.myapplication.mvvm.ui.countries.fragment.CountriesFragment
+import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.CountriesFragment
 
 class AuthFragment : Fragment() {
 

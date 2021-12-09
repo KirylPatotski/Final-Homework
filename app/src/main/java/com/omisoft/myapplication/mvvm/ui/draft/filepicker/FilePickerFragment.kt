@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.ui.filepicker
+package com.omisoft.myapplication.mvvm.ui.draft.filepicker
 
 import android.Manifest
 import android.content.pm.PackageManager

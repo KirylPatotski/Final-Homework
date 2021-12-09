@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.ui.countries.activity
+package com.omisoft.myapplication.mvvm.ui.draft.countries.activity
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -6,7 +6,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.mvvm.ui.countries.CountriesViewModel
+import com.omisoft.myapplication.mvvm.ui.draft.countries.CountriesViewModel
 
 class CountriesActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.ui.browser
+package com.omisoft.myapplication.mvvm.ui.draft.browser
 
 import android.content.Intent
 import android.net.Uri
