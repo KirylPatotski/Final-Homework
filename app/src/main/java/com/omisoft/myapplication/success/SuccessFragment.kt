@@ -29,7 +29,7 @@ class SuccessFragment : Fragment() {
         val successFlagImageView = view.findViewById<AppCompatImageView>(R.id.success_flag)
         val successMessageTextView = view.findViewById<TextView>(R.id.success_message)
 
-        val flag = ContextCompat.getDrawable(requireContext(), R.drawable.flag_of_belarus)
+        val flag = ContextCompat.getDrawable(requireContext(), R.drawable.belarus)
         val redColor = ContextCompat.getColor(requireContext(), R.color.red)
 
         successFlagImageView.setImageDrawable(flag)

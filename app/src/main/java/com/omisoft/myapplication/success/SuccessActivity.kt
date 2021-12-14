@@ -15,7 +15,7 @@ class SuccessActivity : AppCompatActivity() {
         val successFlagImageView = findViewById<AppCompatImageView>(R.id.success_flag)
         val successMessageTextView = findViewById<TextView>(R.id.success_message)
 
-        val flag = ContextCompat.getDrawable(this, R.drawable.flag_of_belarus)
+        val flag = ContextCompat.getDrawable(this, R.drawable.belarus)
         val redColor = ContextCompat.getColor(this, R.color.red)
 
         successFlagImageView.setImageDrawable(flag)

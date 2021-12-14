@@ -1,14 +1,21 @@
 package com.omisoft.myapplication.mvvm.ui.draft.countries.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.ui.draft.browser.BrowserFragment
@@ -16,11 +23,16 @@ import com.omisoft.myapplication.mvvm.ui.draft.countries.ListViewModel
 import com.omisoft.myapplication.mvvm.ui.draft.filepicker.FilePickerFragment
 import com.omisoft.myapplication.success.SuccessFragment
 
+
 class ListFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "ListFragment"
+    }
+
     private val viewModel by viewModels<ListViewModel>()
-    private lateinit var albumsListView: ListView
-    private var adapter: AlbumsBaseAdapter? = null
+    private lateinit var albumsRecyclerView: RecyclerView
+    private var adapter: AlbumRecyclerAdapter? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,11 +48,50 @@ class ListFragment : Fragment() {
         )
 
         lifecycle.addObserver(viewModel)
-        albumsListView = view.findViewById(R.id.list_albums)
+        albumsRecyclerView = view.findViewById(R.id.list_albums)
+        albumsRecyclerView.run {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, true).apply {
+                stackFromEnd = true
+            }
+        }
 
         val openSuccessButton = view.findViewById<AppCompatButton>(R.id.open_success_button)
         val openUrlButton = view.findViewById<AppCompatButton>(R.id.open_url_button)
         val countriesOpenFilePicker = view.findViewById<AppCompatButton>(R.id.open_file_picker_button)
+        val spinner = view.findViewById<AppCompatSpinner>(R.id.spinner)
+        val imageFlag = view.findViewById<AppCompatImageView>(R.id.image_flag)
+
+        val countriesArray = resources.getStringArray(R.array.countries)
+
+        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.countries, android.R.layout.simple_spinner_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val country = countriesArray[position]
+                Log.d(TAG, country)
+                when (country) {
+                    "Belarus" -> {
+                        imageFlag.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.belarus))
+                    }
+                    "Ukraine" -> {
+                        imageFlag.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ukraine))
+                    }
+                    "Italy" -> {
+                        imageFlag.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.italy))
+                    }
+                    else -> {
+                        imageFlag.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_launcher_foreground))
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d(TAG, "Nothing was selected")
+            }
+        }
 
         openSuccessButton.setOnClickListener {
             (activity as MainActivity).openFragment(SuccessFragment(), tag = "SuccessFragment")
@@ -53,14 +104,6 @@ class ListFragment : Fragment() {
         }
 
         subscribeToLiveData()
-        setListeners()
-    }
-
-    private fun setListeners() {
-        albumsListView.setOnItemClickListener { _, _, position, _ ->
-            val selectedAlbum = adapter?.getItem(position)
-            println(selectedAlbum)
-        }
     }
 
     private fun subscribeToLiveData() {
@@ -69,8 +112,8 @@ class ListFragment : Fragment() {
 //            albumsListView.adapter = adapter
         })
         viewModel.albumsLiveData.observe(viewLifecycleOwner, { albums ->
-            adapter = AlbumsBaseAdapter(albums, requireContext())
-            albumsListView.adapter = adapter
+            adapter = AlbumRecyclerAdapter(albums) { album -> Log.d(TAG, album.toString()) }
+            albumsRecyclerView.adapter = adapter
         })
     }
 
