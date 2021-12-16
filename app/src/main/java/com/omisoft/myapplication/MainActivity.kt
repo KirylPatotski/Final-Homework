@@ -1,10 +1,11 @@
 package com.omisoft.myapplication
 
-import android.os.Bundle
+import android.os.*
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
 import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.ListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -13,7 +14,10 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
         const val NAVIGATION_EVENT = "navigation_event"
         const val NAVIGATION_EVENT_DATA_KEY = "navigation_event_data_key"
+        const val HANDLER_DATA_KEY = "handler_data_key"
     }
+
+    private val myThread = MyCustomHandlerThread()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,38 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             openFragment(ListFragment(), tag = "ListFragment")
         }
+
+        myThread.start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val handler = myThread.getHandler()
+
+            val message = Message()
+            val bundle = Bundle()
+            bundle.putString(HANDLER_DATA_KEY, "task 1")
+            message.data = bundle
+            handler?.sendMessage(message)
+        }, 1000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val handler = myThread.getHandler()
+
+            val message = Message()
+            val bundle = Bundle()
+            bundle.putString(HANDLER_DATA_KEY, "task 2")
+            message.data = bundle
+            handler?.sendMessage(message)
+        }, 4000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val handler = myThread.getHandler()
+
+            val message = Message()
+            val bundle = Bundle()
+            bundle.putString(HANDLER_DATA_KEY, "task 3")
+            message.data = bundle
+            handler?.sendMessage(message)
+        }, 6000)
     }
 
     fun openFragment(fragment: Fragment, doClearBackStack: Boolean = false, tag: String? = null) {
@@ -48,7 +84,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun clearBackStack() = supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    private fun clearBackStack() {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
 
     private fun listenNavigationEvents() {
         supportFragmentManager.setFragmentResultListener(NAVIGATION_EVENT, this) { _, bundle ->
@@ -56,4 +94,80 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, navigationEvent)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myThread.quitSafely()
+    }
+}
+
+class MyCustomThread : Thread() {
+    var myHandler: Handler? = null
+
+    override fun run() {
+        super.run()
+
+        Looper.prepare()
+        val looper = Looper.myLooper()
+
+        looper?.let {
+            myHandler = object : Handler(looper) {
+                override fun handleMessage(msg: Message) {
+                    val bundle = msg.data
+
+                    when (bundle.getString(HANDLER_DATA_KEY)) {
+                        "task 1" -> {
+                            println("task 1")
+                        }
+                        "task 2" -> {
+                            println("task 2")
+                        }
+                        "task 3" -> {
+                            println("task 3")
+                        }
+                        else -> {
+                            println("else")
+                        }
+                    }
+                }
+            }
+        }
+
+        Looper.loop()
+
+        println("This code will be launched after thread stops")
+    }
+
+    fun getHandler(): Handler? = myHandler
+}
+
+class MyCustomHandlerThread : HandlerThread("MyCustomThread") {
+    var myHandler: Handler? = null
+
+    override fun onLooperPrepared() {
+        super.onLooperPrepared()
+        myHandler = object : Handler(looper) {
+            override fun handleMessage(msg: Message) {
+                val bundle = msg.data
+
+                when (bundle.getString(HANDLER_DATA_KEY)) {
+                    "task 1" -> {
+                        println("task 1")
+                    }
+                    "task 2" -> {
+                        println("task 2")
+                    }
+                    "task 3" -> {
+                        println("task 3")
+                    }
+                    else -> {
+                        println("else")
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun getHandler(): Handler? = myHandler
 }

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.ui.draft.browser.BrowserFragment
@@ -34,6 +35,15 @@ class ListFragment : Fragment() {
     private lateinit var albumsRecyclerView: RecyclerView
     private var adapter: AlbumRecyclerAdapter? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        val fadeBrowser = inflater.inflateTransition(R.transition.fade_browser)
+        val slideBrowser = inflater.inflateTransition(R.transition.slide_browser)
+
+        enterTransition = slideBrowser
+        exitTransition = fadeBrowser
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_countries, container, false)
@@ -69,7 +79,7 @@ class ListFragment : Fragment() {
         spinner.adapter = adapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val country = countriesArray[position]
                 Log.d(TAG, country)
                 when (country) {

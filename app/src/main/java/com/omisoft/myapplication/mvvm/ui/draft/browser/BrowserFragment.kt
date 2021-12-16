@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionInflater
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 
@@ -16,6 +17,16 @@ class BrowserFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_browser, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        val fadeBrowser = inflater.inflateTransition(R.transition.fade_browser)
+        val slideBrowser = inflater.inflateTransition(R.transition.slide_browser)
+
+        enterTransition = slideBrowser
+        exitTransition = fadeBrowser
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
