@@ -1,5 +1,6 @@
 package com.omisoft.myapplication.mvvm.ui.auth.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
 import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.AlbumsListFragment
+import java.io.File
 
 
 class AuthFragment : Fragment() {
@@ -73,6 +75,11 @@ class AuthFragment : Fragment() {
             val emailText = loginField.editText?.text.toString()
             val passwordText = passwordField.editText?.text.toString()
             viewModel.onLoginClicked(emailText, passwordText)
+            viewModel.saveCredentialsToFile(
+                emailText,
+                passwordText,
+                File(requireActivity().getDir("credentials", Context.MODE_PRIVATE).absolutePath + "/" + "credentials.txt")
+            )
         }
         saveCredentialsCheckBox.setOnCheckedChangeListener { _, selected ->
             viewModel.setSaveCredentialsSelected(selected)

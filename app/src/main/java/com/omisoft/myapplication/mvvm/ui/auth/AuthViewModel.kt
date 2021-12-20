@@ -2,6 +2,7 @@ package com.omisoft.myapplication.mvvm.ui.auth
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +11,14 @@ import com.omisoft.myapplication.mvvm.model.network.NetworkAuthServiceImpl
 import com.omisoft.myapplication.mvvm.model.storage.LocalStorageModel
 import com.omisoft.myapplication.mvvm.model.storage.UserStorage
 import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferences
+import java.io.*
 
 class AuthViewModel : ViewModel(), LifecycleObserver {
+
+    companion object {
+        private const val TAG = "AuthViewModel"
+    }
+
     val isLoginSuccessLiveData = MutableLiveData<Unit>()
     val isLoginFailedLiveData = MutableLiveData<Unit>()
     val showProgressLiveData = MutableLiveData<Unit>()
@@ -54,6 +61,53 @@ class AuthViewModel : ViewModel(), LifecycleObserver {
 
     fun setSaveCredentialsSelected(isSelected: Boolean) {
         preferences?.setSaveCredentialsSelected(isSelected)
+    }
+
+    fun saveCredentialsToFile(email: String, password: String, file: File) {
+        var fos: FileOutputStream? = null
+
+        try {
+            file.createNewFile()
+
+            fos = FileOutputStream(file)
+            fos.write("$email, $password".toByteArray())
+        } catch (error: Exception) {
+            Log.e(TAG, error.message ?: "")
+        } finally {
+            fos?.close()
+            getCredentialsFromFile(file)
+        }
+    }
+
+    private fun getCredentialsFromFile(file: File) {
+        var fis: FileInputStream? = null
+
+        try {
+            fis = FileInputStream(file)
+            val isr = InputStreamReader(fis)
+            val bsr = BufferedReader(isr)
+            val stringBuilder = StringBuilder()
+            val iterator = bsr.lineSequence().iterator()
+
+            while (iterator.hasNext()) {
+                stringBuilder.append(iterator.next())
+            }
+
+            val result = stringBuilder.toString()
+
+            if (result.isNotBlank()) {
+                val credentials = result.split(",")
+
+                val email = credentials[0]
+                val password = credentials[1]
+
+                println("CREDENTIALS: email = $email, password = $password")
+            }
+        } catch (error: Exception) {
+            Log.e(TAG, error.message ?: "")
+        } finally {
+            fis?.close()
+        }
     }
 
     private fun saveCredentials(email: String, password: String) {
