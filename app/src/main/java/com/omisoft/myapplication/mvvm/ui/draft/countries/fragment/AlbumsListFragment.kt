@@ -19,13 +19,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
+import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferencesImpl
+import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
 import com.omisoft.myapplication.mvvm.ui.draft.browser.BrowserFragment
 import com.omisoft.myapplication.mvvm.ui.draft.countries.ListViewModel
 import com.omisoft.myapplication.mvvm.ui.draft.filepicker.FilePickerFragment
 import com.omisoft.myapplication.success.SuccessFragment
 
 
-class ListFragment : Fragment() {
+class AlbumsListFragment : Fragment() {
 
     companion object {
         private const val TAG = "ListFragment"
@@ -33,6 +35,13 @@ class ListFragment : Fragment() {
 
     private val viewModel by viewModels<ListViewModel>()
     private lateinit var albumsRecyclerView: RecyclerView
+    private lateinit var logout: AppCompatButton
+    private lateinit var openSuccessButton: AppCompatButton
+    private lateinit var openUrlButton: AppCompatButton
+    private lateinit var countriesOpenFilePicker: AppCompatButton
+    private lateinit var imageFlag: AppCompatImageView
+    private lateinit var spinner: AppCompatSpinner
+    private lateinit var countriesArray: Array<String>
     private var adapter: AlbumRecyclerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +61,8 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.setSharedPreferences(AppPreferencesImpl.getInstance(requireContext()))
+
         requireActivity().supportFragmentManager.setFragmentResult(
             MainActivity.NAVIGATION_EVENT,
             bundleOf(MainActivity.NAVIGATION_EVENT_DATA_KEY to "CountriesFragment Created")
@@ -65,19 +76,23 @@ class ListFragment : Fragment() {
             }
         }
 
-        val openSuccessButton = view.findViewById<AppCompatButton>(R.id.open_success_button)
-        val openUrlButton = view.findViewById<AppCompatButton>(R.id.open_url_button)
-        val countriesOpenFilePicker = view.findViewById<AppCompatButton>(R.id.open_file_picker_button)
-        val spinner = view.findViewById<AppCompatSpinner>(R.id.spinner)
-        val imageFlag = view.findViewById<AppCompatImageView>(R.id.image_flag)
-
-        val countriesArray = resources.getStringArray(R.array.countries)
+        openSuccessButton = view.findViewById(R.id.open_success_button)
+        openUrlButton = view.findViewById(R.id.open_url_button)
+        countriesOpenFilePicker = view.findViewById(R.id.open_file_picker_button)
+        spinner = view.findViewById(R.id.spinner)
+        imageFlag = view.findViewById(R.id.image_flag)
+        logout = view.findViewById(R.id.log_out_button)
+        countriesArray = resources.getStringArray(R.array.countries)
 
         val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.countries, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.adapter = adapter
+        setListeners()
+        subscribeToLiveData()
+    }
 
+    private fun setListeners() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val country = countriesArray[position]
@@ -112,8 +127,9 @@ class ListFragment : Fragment() {
         countriesOpenFilePicker.setOnClickListener {
             (activity as MainActivity).openFragment(FilePickerFragment(), tag = "FilePickerFragment")
         }
-
-        subscribeToLiveData()
+        logout.setOnClickListener {
+            viewModel.logout()
+        }
     }
 
     private fun subscribeToLiveData() {
@@ -124,6 +140,9 @@ class ListFragment : Fragment() {
         viewModel.albumsLiveData.observe(viewLifecycleOwner, { albums ->
             adapter = AlbumRecyclerAdapter(albums) { album -> Log.d(TAG, album.toString()) }
             albumsRecyclerView.adapter = adapter
+        })
+        viewModel.logoutLiveData.observe(viewLifecycleOwner, {
+            (activity as MainActivity).openFragment(AuthFragment(), doClearBackStack = true, "AuthFragment")
         })
     }
 

@@ -2,10 +2,12 @@
     <string name="app_name">Мое Приложение</string>
     <string name="auth_login">Логин</string>
     <string name="auth_password">Пароль</string>
+    <string name="auth_save_credentials">Сохранить логин и пароль</string>
 
-    <string name="countries_finish">Финиш</string>
-    <string name="countries_open_url">Открыть ссылку</string>
-    <string name="countries_open_file_picker">Открыть FilePicker</string>
+    <string name="list_finish">Финиш</string>
+    <string name="list_open_url">Открыть ссылку</string>
+    <string name="list_open_file_picker">Открыть FilePicker</string>
+    <string name="list_log_out">Выйти</string>
 
     <string name="success_message">Успех</string>
 

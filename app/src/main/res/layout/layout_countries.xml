@@ -46,7 +46,7 @@
             android:id="@+id/open_success_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/countries_finish"
+            android:text="@string/list_finish"
             app:layout_constraintBottom_toTopOf="@+id/open_url_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
             android:id="@+id/open_url_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/countries_open_url"
+            android:text="@string/list_open_url"
             app:layout_constraintBottom_toTopOf="@+id/open_file_picker_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,10 +66,19 @@
             android:id="@+id/open_file_picker_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/countries_open_file_picker"
+            android:text="@string/list_open_file_picker"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/open_url_button" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/log_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_log_out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/open_file_picker_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

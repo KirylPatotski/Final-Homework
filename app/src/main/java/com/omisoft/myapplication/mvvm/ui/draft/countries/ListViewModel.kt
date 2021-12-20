@@ -4,15 +4,22 @@ import androidx.lifecycle.*
 import com.omisoft.myapplication.mvvm.model.entity.Album
 import com.omisoft.myapplication.mvvm.model.network.NetworkMusicService
 import com.omisoft.myapplication.mvvm.model.network.NetworkMusicServiceImpl
+import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferences
 
 class ListViewModel : ViewModel(), LifecycleEventObserver {
 
     val countriesLiveData = MutableLiveData<List<String>>()
     val albumsLiveData = MutableLiveData<List<Album>>()
+    val logoutLiveData = MutableLiveData<Unit>()
 
     val model: CountriesModel = CountriesModelImpl()
 
+    private var preferences: AppPreferences? = null
     private val musicModel: NetworkMusicService = NetworkMusicServiceImpl()
+
+    fun setSharedPreferences(preferences: AppPreferences) {
+        this.preferences = preferences
+    }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
@@ -42,6 +49,12 @@ class ListViewModel : ViewModel(), LifecycleEventObserver {
         }
     }
 
+    fun logout() {
+        preferences?.saveToken("")
+        logoutLiveData.value = Unit
+    }
+
+
     private fun getCountries() {
         val countries = model.getCountries()
         countriesLiveData.value = countries
@@ -50,10 +63,5 @@ class ListViewModel : ViewModel(), LifecycleEventObserver {
     private fun getAlbums() {
         val albums = musicModel.getAlbums()
         albumsLiveData.value = albums
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        println("CLEARED")
     }
 }
