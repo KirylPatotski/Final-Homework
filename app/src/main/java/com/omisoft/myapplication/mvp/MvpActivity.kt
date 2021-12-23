@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.success.SuccessActivity
+import com.omisoft.myapplication.mvp.success.SuccessActivity
 
 class MvpActivity : AppCompatActivity(), MvpView {
     private lateinit var progress: ProgressBar

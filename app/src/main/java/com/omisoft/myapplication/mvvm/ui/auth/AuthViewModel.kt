@@ -6,11 +6,11 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.omisoft.myapplication.mvvm.model.network.NetworkAuthService
-import com.omisoft.myapplication.mvvm.model.network.NetworkAuthServiceImpl
-import com.omisoft.myapplication.mvvm.model.storage.LocalStorageModel
-import com.omisoft.myapplication.mvvm.model.storage.UserStorage
-import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferences
+import com.omisoft.myapplication.mvvm.data.network.NetworkAuthService
+import com.omisoft.myapplication.mvvm.data.network.NetworkAuthServiceImpl
+import com.omisoft.myapplication.mvvm.data.storage.LocalStorageModel
+import com.omisoft.myapplication.mvvm.data.storage.UserStorage
+import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferences
 import java.io.*
 
 class AuthViewModel : ViewModel(), LifecycleObserver {

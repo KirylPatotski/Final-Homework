@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
-import com.omisoft.myapplication.mvvm.ui.draft.countries.activity.CountriesActivity
+import com.omisoft.myapplication.mvvm.ui.draft.albums.activity.CountriesActivity
 
 
 class AuthActivity : AppCompatActivity() {

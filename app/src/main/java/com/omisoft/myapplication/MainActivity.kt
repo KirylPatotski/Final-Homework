@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
-import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferencesImpl
+import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
-import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.AlbumsListFragment
+import com.omisoft.myapplication.mvvm.ui.draft.albums.fragment.AlbumsListFragment
 
 class MainActivity : AppCompatActivity() {
 

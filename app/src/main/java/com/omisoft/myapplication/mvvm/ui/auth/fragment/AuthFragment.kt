@@ -19,9 +19,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.mvvm.model.storage.preferences.AppPreferencesImpl
+import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
-import com.omisoft.myapplication.mvvm.ui.draft.countries.fragment.AlbumsListFragment
+import com.omisoft.myapplication.mvvm.ui.draft.albums.fragment.AlbumsListFragment
 import java.io.File
 
 
