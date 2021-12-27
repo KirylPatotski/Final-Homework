@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.data.network.model
+package com.omisoft.myapplication.mvvm.data.network.model.artists
 
 import com.google.gson.annotations.SerializedName
 

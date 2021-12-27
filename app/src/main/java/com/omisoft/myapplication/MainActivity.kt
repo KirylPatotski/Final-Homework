@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentManager
 import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
-import com.omisoft.myapplication.mvvm.ui.draft.alarm.AlarmFragment
 import com.omisoft.myapplication.mvvm.ui.draft.albums.fragment.AlbumsListFragment
+import com.omisoft.myapplication.mvvm.ui.music.fragment.MusicFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (AppPreferencesImpl.getInstance(this).getToken().isBlank()) {
-                openFragment(AlarmFragment(), tag = "AlarmFragment")
+                openFragment(AuthFragment(), tag = "AuthFragment")
             } else {
-                openFragment(AlbumsListFragment(), tag = "ListFragment")
+                openFragment(MusicFragment(), tag = "MusicFragment")
             }
         }
 

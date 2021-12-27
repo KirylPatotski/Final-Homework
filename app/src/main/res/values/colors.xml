@@ -9,5 +9,10 @@
     <color name="overlay">#6D000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="background_default">#1A222F</color>
+
+    <color name="auth_input_layout_stroke">#00FF3D</color>
+    <color name="blue">#03A9F4</color>
+
     <color name="red">#FF1F0E</color>
 </resources>

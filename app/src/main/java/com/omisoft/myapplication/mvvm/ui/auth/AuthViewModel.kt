@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.omisoft.myapplication.mvvm.data.network.NetworkAuthService
-import com.omisoft.myapplication.mvvm.data.network.NetworkAuthServiceImpl
+import com.omisoft.myapplication.mvvm.data.network.service.auth.NetworkAuthService
+import com.omisoft.myapplication.mvvm.data.network.service.auth.NetworkAuthServiceImpl
 import com.omisoft.myapplication.mvvm.data.storage.LocalStorageModel
 import com.omisoft.myapplication.mvvm.data.storage.UserStorage
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferences

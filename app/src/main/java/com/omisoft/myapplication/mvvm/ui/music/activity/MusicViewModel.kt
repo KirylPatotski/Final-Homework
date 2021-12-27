@@ -1,8 +1,8 @@
-package com.omisoft.myapplication.mvvm.ui.music
+package com.omisoft.myapplication.mvvm.ui.music.activity
 
 import androidx.lifecycle.ViewModel
-import com.omisoft.myapplication.mvvm.data.network.NetworkMusicService
-import com.omisoft.myapplication.mvvm.data.network.NetworkMusicServiceImpl
+import com.omisoft.myapplication.mvvm.data.network.service.music.NetworkMusicService
+import com.omisoft.myapplication.mvvm.data.network.service.music.NetworkMusicServiceImpl
 import com.omisoft.myapplication.mvvm.data.storage.LocalStorageModel
 
 class MusicViewModel : ViewModel() {

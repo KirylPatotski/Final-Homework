@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.ui.music
+package com.omisoft.myapplication.mvvm.ui.music.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

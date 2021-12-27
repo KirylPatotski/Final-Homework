@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.data.network
+package com.omisoft.myapplication.mvvm.data.network.service.music
 
 import com.omisoft.myapplication.mvvm.data.storage.room.entity.Album;
 

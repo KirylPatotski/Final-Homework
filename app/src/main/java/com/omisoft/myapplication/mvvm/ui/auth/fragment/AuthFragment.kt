@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -60,13 +61,34 @@ class AuthFragment : Fragment() {
         titleText = view.findViewById(R.id.title_text)
         saveCredentialsCheckBox = view.findViewById(R.id.save_credentials_check_box)
 
+        if (loginField.editText?.text?.isBlank() == true) {
+            ContextCompat.getColorStateList(requireContext(), R.color.auth_input_layout_stroke_color_default)?.let {
+                loginField.setBoxStrokeColorStateList(it)
+            }
+        } else {
+            ContextCompat.getColorStateList(requireContext(), R.color.auth_input_layout_stroke_color)?.let { colorList ->
+                loginField.setBoxStrokeColorStateList(colorList)
+            }
+        }
+
         initListeners()
         subscribeOnLiveData()
     }
 
     private fun initListeners() {
         loginField.editText?.addTextChangedListener {
-            viewModel.setUpdatedEmail(it.toString())
+            it?.let {
+                viewModel.setUpdatedEmail(it.toString())
+                if (it.isBlank()) {
+                    ContextCompat.getColorStateList(requireContext(), R.color.auth_input_layout_stroke_color_default)?.let { colorList ->
+                        loginField.setBoxStrokeColorStateList(colorList)
+                    }
+                } else {
+                    ContextCompat.getColorStateList(requireContext(), R.color.auth_input_layout_stroke_color)?.let { colorList ->
+                        loginField.setBoxStrokeColorStateList(colorList)
+                    }
+                }
+            }
         }
         passwordField.editText?.addTextChangedListener {
             viewModel.setUpdatedPassword(it.toString())

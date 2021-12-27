@@ -2,8 +2,8 @@ package com.omisoft.myapplication.mvvm.ui.draft.albums
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.omisoft.myapplication.mvvm.data.network.NetworkMusicService
-import com.omisoft.myapplication.mvvm.data.network.NetworkMusicServiceImpl
+import com.omisoft.myapplication.mvvm.data.network.service.music.NetworkMusicService
+import com.omisoft.myapplication.mvvm.data.network.service.music.NetworkMusicServiceImpl
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferences
 import com.omisoft.myapplication.mvvm.data.storage.room.AlbumDao
 import com.omisoft.myapplication.mvvm.data.storage.room.entity.Album
