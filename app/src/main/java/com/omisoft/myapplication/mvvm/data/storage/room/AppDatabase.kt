@@ -5,8 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.omisoft.myapplication.mvvm.data.storage.room.entity.Album
+import com.omisoft.myapplication.mvvm.data.storage.room.entity.CachingCount
 
-@Database(entities = [Album::class], version = 1)
+@Database(entities = [Album::class, CachingCount::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -18,4 +19,6 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun getAlbumDao(): AlbumDao
+
+    abstract fun getCachingCountDao(): CachingCountDao
 }

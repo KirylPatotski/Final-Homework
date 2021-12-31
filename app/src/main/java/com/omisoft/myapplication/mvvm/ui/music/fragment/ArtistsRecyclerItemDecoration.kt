@@ -1,4 +1,4 @@
-package com.omisoft.myapplication.mvvm.data.network.service.last_fm
+package com.omisoft.myapplication.mvvm.ui.music.fragment
 
 import android.graphics.Rect
 import android.util.TypedValue

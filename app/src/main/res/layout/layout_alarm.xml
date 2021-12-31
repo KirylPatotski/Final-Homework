@@ -5,32 +5,10 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_set_alarm"
+        android:id="@+id/button_open_tome_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/set_alarm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TimePicker
-        android:id="@+id/time_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="24dp"
-        android:visibility="gone"
+        android:text="@string/open_time_picker"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

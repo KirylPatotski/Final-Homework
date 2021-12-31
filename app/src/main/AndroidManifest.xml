@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +28,8 @@
         <activity
             android:name="com.omisoft.myapplication.mvvm.ui.draft.albums.activity.CountriesActivity"
             android:exported="true"></activity>
+
+        <receiver android:name=".mvvm.ui.draft.alarm.AlarmBroadcast" />
     </application>
 
 </manifest>

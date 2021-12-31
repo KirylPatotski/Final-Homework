@@ -10,15 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.omisoft.myapplication.R
-import com.omisoft.myapplication.mvvm.data.network.service.last_fm.ArtistsRecyclerItemDecoration
 import com.omisoft.myapplication.mvvm.data.network.service.last_fm.LastFMNetwork
 import com.omisoft.myapplication.mvvm.data.network.service.last_fm.LastFMNetworkImpl
 
 class MusicFragment : Fragment() {
-
-    companion object {
-        private const val TAG = "MusicFragment"
-    }
 
     private val viewModel by viewModels<MusicViewModel>()
     private lateinit var recyclerArtists: RecyclerView

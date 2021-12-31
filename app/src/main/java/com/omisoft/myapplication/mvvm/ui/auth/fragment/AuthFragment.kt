@@ -22,7 +22,7 @@ import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
-import com.omisoft.myapplication.mvvm.ui.draft.albums.fragment.AlbumsListFragment
+import com.omisoft.myapplication.mvvm.ui.music.fragment.MusicFragment
 import java.io.File
 
 
@@ -110,7 +110,7 @@ class AuthFragment : Fragment() {
 
     private fun subscribeOnLiveData() {
         viewModel.isLoginSuccessLiveData.observe(viewLifecycleOwner, {
-            (activity as MainActivity).openFragment(AlbumsListFragment(), doClearBackStack = true)
+            (activity as MainActivity).openFragment(MusicFragment(), doClearBackStack = true, tag = "MusicFragment")
         })
         viewModel.isLoginFailedLiveData.observe(viewLifecycleOwner, {
             Toast.makeText(context, "Something went wrong. Please, retry!", Toast.LENGTH_LONG).show()

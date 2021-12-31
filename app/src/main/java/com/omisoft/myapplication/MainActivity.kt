@@ -2,14 +2,19 @@ package com.omisoft.myapplication
 
 import android.os.*
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.work.*
+import androidx.work.PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS
 import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
-import com.omisoft.myapplication.mvvm.ui.draft.albums.fragment.AlbumsListFragment
-import com.omisoft.myapplication.mvvm.ui.music.fragment.MusicFragment
+import com.omisoft.myapplication.mvvm.ui.draft.alarm.AlarmFragment
+import com.omisoft.myapplication.mvvm.utils.CachingArtistsWorker
+import com.omisoft.myapplication.mvvm.utils.PeriodicWorker
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,12 +37,54 @@ class MainActivity : AppCompatActivity() {
             if (AppPreferencesImpl.getInstance(this).getToken().isBlank()) {
                 openFragment(AuthFragment(), tag = "AuthFragment")
             } else {
-                openFragment(MusicFragment(), tag = "MusicFragment")
+                openFragment(AlarmFragment(), tag = "AlarmFragment")
             }
         }
 
         myThread.start()
+        registerWorkManagers()
+//        registerThreads()
+    }
 
+    override fun onBackPressed() {
+        val fragmentCount = supportFragmentManager.backStackEntryCount
+        if (fragmentCount > 1) {
+            super.onBackPressed()
+        } else {
+            finish()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myThread.quitSafely()
+    }
+
+    fun openFragment(fragment: Fragment, doClearBackStack: Boolean = false, tag: String? = null) {
+        if (doClearBackStack) {
+            clearBackStack()
+        }
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_fragment_container, fragment, tag)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun findFragmentByTag(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
+
+    private fun clearBackStack() {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    private fun listenNavigationEvents() {
+        supportFragmentManager.setFragmentResultListener(NAVIGATION_EVENT, this) { _, bundle ->
+            val navigationEvent = bundle.get(NAVIGATION_EVENT_DATA_KEY) as String
+            Log.d(TAG, navigationEvent)
+        }
+    }
+
+    private fun registerThreads() {
         Handler(Looper.getMainLooper()).postDelayed({
             val handler = myThread.getHandler()
 
@@ -69,42 +116,79 @@ class MainActivity : AppCompatActivity() {
         }, 6000)
     }
 
-    fun openFragment(fragment: Fragment, doClearBackStack: Boolean = false, tag: String? = null) {
-        if (doClearBackStack) {
-            clearBackStack()
-        }
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_fragment_container, fragment, tag)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    fun findFragmentByTag(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
-
-    override fun onBackPressed() {
-        val fragmentCount = supportFragmentManager.backStackEntryCount
-        if (fragmentCount > 1) {
-            super.onBackPressed()
+    private fun registerWorkManagers() {
+        val oneTimeConstraints: Constraints = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(false)
+                .setRequiresCharging(false)
+                .setRequiresDeviceIdle(false)
+                .build()
         } else {
-            finish()
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(false)
+                .setRequiresCharging(false)
+                .build()
         }
-    }
 
-    private fun clearBackStack() {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    }
+        val worker = OneTimeWorkRequestBuilder<CachingArtistsWorker>()
+            .addTag("CachingArtistsWorker1")
+            .setConstraints(oneTimeConstraints)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
 
-    private fun listenNavigationEvents() {
-        supportFragmentManager.setFragmentResultListener(NAVIGATION_EVENT, this) { _, bundle ->
-            val navigationEvent = bundle.get(NAVIGATION_EVENT_DATA_KEY) as String
-            Log.d(TAG, navigationEvent)
-        }
-    }
+        val worker2 = OneTimeWorkRequestBuilder<CachingArtistsWorker>()
+            .addTag("CachingArtistsWorker2")
+            .setConstraints(oneTimeConstraints)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        myThread.quitSafely()
+        val worker3 = OneTimeWorkRequestBuilder<CachingArtistsWorker>()
+            .addTag("CachingArtistsWorker3")
+            .setConstraints(oneTimeConstraints)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
+
+        WorkManager.getInstance(this)
+            .beginWith(worker)
+            .then(listOf(worker2, worker3))
+            .enqueue()
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(worker2.id).observe(this, { workInfo ->
+            if (workInfo != null && workInfo.state == WorkInfo.State.SUCCEEDED) {
+                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+            }
+        })
+
+        val periodicConstraints: Constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(false)
+            .build()
+
+        val periodicWorker = PeriodicWorkRequestBuilder<PeriodicWorker>(MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+            .addTag("PeriodicWorker")
+            .setConstraints(periodicConstraints)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
+
+        WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 }
 
