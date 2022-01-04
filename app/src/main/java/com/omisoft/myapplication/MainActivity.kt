@@ -11,7 +11,7 @@ import androidx.work.PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS
 import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
-import com.omisoft.myapplication.mvvm.ui.draft.alarm.AlarmFragment
+import com.omisoft.myapplication.mvvm.ui.draft.service_notification.NotificationFragment
 import com.omisoft.myapplication.mvvm.utils.CachingArtistsWorker
 import com.omisoft.myapplication.mvvm.utils.PeriodicWorker
 import java.util.concurrent.TimeUnit
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             if (AppPreferencesImpl.getInstance(this).getToken().isBlank()) {
                 openFragment(AuthFragment(), tag = "AuthFragment")
             } else {
-                openFragment(AlarmFragment(), tag = "AlarmFragment")
+                openFragment(NotificationFragment(), tag = "NotificationFragment")
             }
         }
 

@@ -16,4 +16,13 @@
     <string name="file_picker_open">Открыть</string>
 
     <string name="open_time_picker">Выбрать время</string>
+
+    <string name="notification_name">Уведомления о сообщениях</string>
+    <string name="notification_description">Уведомления о новых сообщениях</string>
+
+    <string name="notification_name_alarm">Уведомления будильника</string>
+    <string name="notification_description_alarm">Уведомления о событиях будильника</string>
+
+    <string name="notification_name_progress">Уведомления о прогрессе</string>
+    <string name="notification_description_progress">Уведомления о прогрессе</string>
 </resources>
