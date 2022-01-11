@@ -1,5 +1,8 @@
 package com.omisoft.myapplication
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.os.*
 import android.util.Log
 import android.widget.Toast
@@ -14,7 +17,9 @@ import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
 import com.omisoft.myapplication.mvvm.ui.draft.service_notification.NotificationFragment
 import com.omisoft.myapplication.mvvm.utils.CachingArtistsWorker
 import com.omisoft.myapplication.mvvm.utils.PeriodicWorker
+import com.omisoft.myapplication.mvvm.utils.WeatherWidget
 import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +48,20 @@ class MainActivity : AppCompatActivity() {
 
         myThread.start()
         registerWorkManagers()
+        updateProgrammaticallyHomeWidget()
 //        registerThreads()
+    }
+
+    private fun updateProgrammaticallyHomeWidget() {
+        Handler(Looper.myLooper()!!).postDelayed({
+            val intent = Intent(this, WeatherWidget::class.java).apply {
+                val ids: IntArray = AppWidgetManager.getInstance(application)
+                    .getAppWidgetIds(ComponentName(application, WeatherWidget::class.java))
+                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            }
+            sendBroadcast(intent)
+        }, 5000)
     }
 
     override fun onBackPressed() {

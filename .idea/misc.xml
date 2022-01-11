@@ -13,6 +13,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_music.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/browser_layout.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/layout/home_buttons_widget.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/home_weather_widget.xml" value="0.11578947368421053" />
         <entry key="app/src/main/res/layout/layout_album_item.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/layout_alrm.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/layout_artist_item.xml" value="0.1" />
@@ -26,6 +28,7 @@
         <entry key="app/src/main/res/layout/test_constraint_layout.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/test_frame_layout.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/test_linear_layout.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/weather_widget.xml" value="0.24375" />
       </map>
     </option>
   </component>
