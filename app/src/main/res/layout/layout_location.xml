@@ -4,24 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/passed_distance_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:text="Passed distance"
+        android:text="@string/location_fragment_passed_distance"
+        app:layout_constraintBottom_toTopOf="@+id/clear_polyline_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/clear_polyline_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/location_fragment_clear_polyline"
+        app:layout_constraintBottom_toTopOf="@+id/track_distance_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/track_distance_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Track distance"
+        android:text="@string/location_fragment_calculate_distance"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passed_distance_text" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

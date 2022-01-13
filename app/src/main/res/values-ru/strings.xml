@@ -37,4 +37,6 @@
     <string name="home_weather_widget_open_mvp_text">Open mvp</string>
 
     <string name="location_fragment_passed_distance">Пройденная дистанция: %1$s</string>
+    <string name="location_fragment_calculate_distance">Рассчитать дистанцию</string>
+    <string name="location_fragment_clear_polyline">Очистить маршрут</string>
 </resources>

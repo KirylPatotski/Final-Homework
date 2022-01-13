@@ -1,8 +1,11 @@
 package com.omisoft.myapplication.mvvm.ui.draft.location
 
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -20,14 +23,21 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.omisoft.myapplication.R
 
-class LocationFragment : Fragment() {
+
+class LocationFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         private const val TAG = "LocationFragment"
+        private const val SCHEME_PACKAGE = "package"
     }
 
     private lateinit var requestLocationPermissionLauncher: ActivityResultLauncher<Array<String>>
@@ -35,6 +45,14 @@ class LocationFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var passedDistanceText: TextView
     private lateinit var trackDistanceButton: AppCompatButton
+    private lateinit var clearPolylineButton: AppCompatButton
+    private var map: GoogleMap? = null
+    private var marker: Marker? = null
+    private var customMarker: Bitmap? = null
+    private var locations = mutableListOf<LatLng>()
+    private var polyline: Polyline? = null
+    private var previousPolyline: Polyline? = null
+
     private var previousLocation: Location? = null
     private var passedDistance: Float = 0f
     private var trackDistance = false
@@ -46,8 +64,18 @@ class LocationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        customMarker = Bitmap.createScaledBitmap(
+            (ContextCompat.getDrawable(requireContext(), R.drawable.marker) as BitmapDrawable).bitmap,
+            100,
+            100,
+            false
+        )
         passedDistanceText = view.findViewById(R.id.passed_distance_text)
         trackDistanceButton = view.findViewById(R.id.track_distance_button)
+        clearPolylineButton = view.findViewById(R.id.clear_polyline_button)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         requestLocationPermissionLauncher =
             registerForActivityResult(
@@ -71,9 +99,17 @@ class LocationFragment : Fragment() {
         setClickListeners()
     }
 
+    override fun onMapReady(map: GoogleMap) {
+        this.map = map
+    }
+
     private fun setClickListeners() {
         trackDistanceButton.setOnClickListener {
             trackDistance = !trackDistance
+        }
+        clearPolylineButton.setOnClickListener {
+            locations.clear()
+            polyline?.remove()
         }
     }
 
@@ -102,21 +138,15 @@ class LocationFragment : Fragment() {
         )
     }
 
-    private fun requestBackgroundLocationPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestBackgroundLocationPermissionLauncher.launch(
-                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
-    }
-
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
+//      Last location.
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             location ?: return@addOnSuccessListener
             Log.d(TAG, "LastLocation: latitude = ${location.latitude}, longitude = ${location.longitude}")
         }
 
+//      Current location
         fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
             private var isCancellationRequested = false
 
@@ -130,6 +160,7 @@ class LocationFragment : Fragment() {
             }
         }).addOnSuccessListener { location ->
             location ?: return@addOnSuccessListener
+            onLocation(LatLng(location.latitude, location.longitude))
             Log.d(TAG, "CurrentLocation: latitude = ${location.latitude}, longitude = ${location.longitude}")
         }
     }
@@ -155,16 +186,49 @@ class LocationFragment : Fragment() {
 
                 Log.d(TAG, "Updated Location: latitude = ${updatedLocation.latitude}, longitude = ${updatedLocation.longitude}")
                 previousLocation = updatedLocation
+                onLocation(LatLng(updatedLocation.latitude, updatedLocation.longitude))
             }
         }
 
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
+    private fun onLocation(latLng: LatLng) {
+        locations.add(latLng)
+        marker?.remove()
+        customMarker?.let {
+            marker = map?.addMarker(
+                MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromBitmap(it))
+                    .position(latLng)
+                    .title("Marker in Sydney")
+            )
+        }
+
+        polyline = map?.addPolyline(
+            PolylineOptions()
+                .color(ContextCompat.getColor(requireContext(), R.color.teal_200))
+                .clickable(true)
+                .addAll(locations)
+        )
+        previousPolyline?.remove()
+        previousPolyline = polyline
+
+        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+    }
+
     private fun openAppSettings() {
         startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+            val uri: Uri = Uri.fromParts(SCHEME_PACKAGE, requireActivity().packageName, null)
             data = uri
         })
+    }
+
+    private fun requestBackgroundLocationPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestBackgroundLocationPermissionLauncher.launch(
+                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
     }
 }
