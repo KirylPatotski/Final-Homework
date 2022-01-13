@@ -13,7 +13,7 @@ import androidx.work.*
 import androidx.work.PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS
 import com.omisoft.myapplication.MainActivity.Companion.HANDLER_DATA_KEY
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
-import com.omisoft.myapplication.mvvm.ui.auth.fragment.AuthFragment
+import com.omisoft.myapplication.mvvm.ui.draft.location.LocationFragment
 import com.omisoft.myapplication.mvvm.ui.draft.service_notification.NotificationFragment
 import com.omisoft.myapplication.mvvm.utils.CachingArtistsWorker
 import com.omisoft.myapplication.mvvm.utils.PeriodicWorker
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (AppPreferencesImpl.getInstance(this).getToken().isBlank()) {
-                openFragment(AuthFragment(), tag = "AuthFragment")
+                openFragment(LocationFragment(), tag = "LocationFragment")
             } else {
                 openFragment(NotificationFragment(), tag = "NotificationFragment")
             }
