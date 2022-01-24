@@ -1,7 +1,5 @@
 package com.omisoft.myapplication.mvvm.ui.auth
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -21,10 +19,10 @@ class AuthViewModel(
         private const val TAG = "AuthViewModel"
     }
 
-    val isLoginSuccessLiveData = MutableLiveData<Unit>()
-    val isLoginFailedLiveData = MutableLiveData<Unit>()
-    val showProgressLiveData = MutableLiveData<Unit>()
-    val hideProgressLiveData = MutableLiveData<Unit>()
+    val isLoginSuccessLiveData = MutableLiveData<Boolean>()
+    val isLoginFailedLiveData = MutableLiveData<Boolean>()
+    val showProgressLiveData = MutableLiveData<Boolean>()
+    val hideProgressLiveData = MutableLiveData<Boolean>()
     val titleLiveData = MutableLiveData<String>()
 
     val emailLiveData = MutableLiveData<String>()
@@ -33,24 +31,18 @@ class AuthViewModel(
 
     fun onLoginClicked(email: String, password: String) {
 //      Сообщаем нашему view, в нашем случае MvvmActivity, что нужно показать прогресс
-        showProgressLiveData.postValue(Unit)
-
-//      Здесь мы делаем задержку, чтобы показать прогресс на протяжении 3000 миллисекунд (3 секунды).
-//      Это мы делаем штучно, на самом деле штучную задержку делать не надо)
-        Handler(Looper.getMainLooper()).postDelayed({
-//          titleLiveData.postValue("Main Page")
-            val token = authModel.onLoginClicked(email, password)
+        showProgressLiveData.postValue(true)
+        val token = authModel.onLoginClicked(email, password)
 
 //      Сообщаем нашему view, в нашем случае MvvmActivity, что нужно спрятать прогресс
-            hideProgressLiveData.postValue(Unit)
-            if (token != null) {
-                saveToken(token)
-                saveCredentials(email, password)
-                isLoginSuccessLiveData.postValue(Unit)
-            } else {
-                isLoginFailedLiveData.postValue(Unit)
-            }
-        }, 3000)
+        hideProgressLiveData.postValue(true)
+        if (token != null) {
+            saveToken(token)
+            saveCredentials(email, password)
+            isLoginSuccessLiveData.postValue(true)
+        } else {
+            isLoginFailedLiveData.postValue(true)
+        }
     }
 
     fun setSaveCredentialsSelected(isSelected: Boolean) {

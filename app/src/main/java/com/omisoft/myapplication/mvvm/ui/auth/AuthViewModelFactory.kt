@@ -6,6 +6,7 @@ import com.omisoft.myapplication.mvvm.data.network.service.auth.NetworkAuthServi
 import com.omisoft.myapplication.mvvm.data.storage.UserStorage
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferences
 
+@Suppress("UNCHECKED_CAST")
 class AuthViewModelFactory(
     private val authModel: NetworkAuthService,
     private val storageModel: UserStorage,
