@@ -12,23 +12,26 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.omisoft.myapplication.MainActivity
 import com.omisoft.myapplication.R
+import com.omisoft.myapplication.mvvm.data.network.service.auth.NetworkAuthService
+import com.omisoft.myapplication.mvvm.data.network.service.auth.NetworkAuthServiceImpl
+import com.omisoft.myapplication.mvvm.data.storage.LocalStorageModel
+import com.omisoft.myapplication.mvvm.data.storage.UserStorage
 import com.omisoft.myapplication.mvvm.data.storage.preferences.AppPreferencesImpl
 import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModel
+import com.omisoft.myapplication.mvvm.ui.auth.AuthViewModelFactory
 import com.omisoft.myapplication.mvvm.ui.music.fragment.MusicFragment
 import java.io.File
 
 
 class AuthFragment : Fragment() {
 
-    private lateinit var viewModel: AuthViewModel
     private lateinit var progress: ProgressBar
     private lateinit var overlay: FrameLayout
     private lateinit var loginField: TextInputLayout
@@ -37,6 +40,14 @@ class AuthFragment : Fragment() {
     private lateinit var saveCredentialsCheckBox: AppCompatCheckBox
     private var titleText: AppCompatTextView? = null
 
+    private val viewModel by viewModels<AuthViewModel> {
+        AuthViewModelFactory(
+            NetworkAuthServiceImpl() as NetworkAuthService,
+            LocalStorageModel() as UserStorage,
+            AppPreferencesImpl.getInstance(requireContext())
+        )
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_auth, container, false)
     }
@@ -44,14 +55,7 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-        viewModel.setSharedPreferences(AppPreferencesImpl.getInstance(requireContext()))
         viewModel.fetchStoredData()
-
-        requireActivity().supportFragmentManager.setFragmentResult(
-            MainActivity.NAVIGATION_EVENT,
-            bundleOf(MainActivity.NAVIGATION_EVENT_DATA_KEY to "AuthFragment Created")
-        )
 
         buttonLogin = view.findViewById(R.id.button_login)
         loginField = view.findViewById(R.id.input_layout_login)
