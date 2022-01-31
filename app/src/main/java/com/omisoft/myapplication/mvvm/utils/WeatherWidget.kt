@@ -37,7 +37,7 @@ class WeatherWidget : AppWidgetProvider() {
         System.currentTimeMillis()
         serviceScope.launch(Dispatchers.IO) {
             val weather = WeatherNetworkImpl.getInstance()
-            val response = weather.getWeatherService().getWeather()
+            val response = weather.getCoroutineWeatherService().getWeather()
 
             serviceScope.launch(Dispatchers.Main) {
                 for (appWidgetId in appWidgetIds) {
