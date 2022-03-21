@@ -1,10 +1,10 @@
-package com.omisoft.app.mvvw.ui.music.favorite
+package com.homework.app.mvvw.ui.music.favorite
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.omisoft.app.mvvw.data.storage.preferences.AppPreferences
+import com.homework.app.mvvw.AppPreferences
 
 class SaveStringImpl(): ViewModel(), LifecycleEventObserver {
 
@@ -46,6 +46,7 @@ class GetStringImpl(): ViewModel(), LifecycleEventObserver {
     fun getStr(): String? {
         var str = preferences?.getFavorite()
         return str.toString()
+
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {

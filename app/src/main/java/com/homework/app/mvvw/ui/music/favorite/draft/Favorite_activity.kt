@@ -1,10 +1,10 @@
-package com.omisoft.app.mvvw.ui.music.favorite.draft
+package com.homework.app.mvvw.ui.music.favorite.draft
 
 import android.app.Activity
 import android.os.Bundle
-import com.omisoft.app.R
+import com.homework.app.R
 
-class Favorite_activity(): Activity() {
+class FavoriteActivity(): Activity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

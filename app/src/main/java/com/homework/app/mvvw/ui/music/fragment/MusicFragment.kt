@@ -1,6 +1,5 @@
-package com.omisoft.app.mvvw.ui.music.fragment
+package com.homework.app.mvvw.ui.music.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.omisoft.app.R
-import com.omisoft.app.mvvw.data.network.service.last_fm.LastFMNetwork
-import com.omisoft.app.mvvw.data.network.service.last_fm.LastFMNetworkImpl
-import com.omisoft.app.mvvw.ui.music.favorite.GetStringImpl
-import com.omisoft.app.mvvw.ui.music.favorite.draft.Favorite_activity
+import com.homework.app.R
+import com.homework.app.mvp.LastFMNetwork
+import com.homework.app.mvp.LastFMNetworkImpl
+import com.homework.app.mvvw.ui.browser.BrowserFragment
+import com.homework.app.mvvw.ui.main.MainActivity
 
 
 class MusicFragment : Fragment() {
@@ -24,6 +23,7 @@ class MusicFragment : Fragment() {
     private lateinit var recyclerArtists: RecyclerView
     private lateinit var openButton: AppCompatButton
     private lateinit var textfield: TextView
+    private lateinit var favorite: FavoriteInfo
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_music, container, false)
@@ -37,43 +37,37 @@ class MusicFragment : Fragment() {
         viewModel.setArtistService(lastFMNetwork.getArtistsService())
         lifecycle.addObserver(viewModel)
 
-        openButton = view.findViewById(R.id.open_favorite_button)
-        openButton.text = "Exit"
+        openButton = view.findViewById(R.id.open_browser_button)
         recyclerArtists = view.findViewById(R.id.recycler_artists)
         recyclerArtists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
         //unfortunately INT.MAX_VALUE as edgeOffset does not work
-        print(Int.MAX_VALUE.toString())
-        recyclerArtists.addItemDecoration(ArtistsRecyclerItemDecoration(64))
+        recyclerArtists.addItemDecoration(ArtistsRecyclerClass(100))
         textfield = view.findViewById(R.id.favoriteTextView)
 
 
+        setListeners()
+        subscribeToLiveData()
+    }
+
+    private fun setListeners(){
 
         textfield.setOnClickListener{
-            var a = GetStringImpl()
-            a.getStr()
-            var Text = a.toString()
+            favorite = FavoriteInfo()
+            var b = Adapter.ViewHolder.favorite
+            var Text = b.toString()
             textfield.text = Text
-        }
 
+        }
 
         openButton.setOnClickListener {
-            val intent = Intent (activity, Favorite_activity::class.java)
-            activity?.startActivity(intent)
+            (activity as MainActivity).openFragment(BrowserFragment(), doClearBackStack = true)
         }
-
-
-        subscribeToLiveData()
-
-
 
     }
 
-
-
     private fun subscribeToLiveData() {
         viewModel.artistsLiveData.observe(viewLifecycleOwner, { artists ->
-            recyclerArtists.adapter = ArtistsAdapter(artists) { artist ->
+            recyclerArtists.adapter = Adapter(artists) { artist ->
 
             }
         })

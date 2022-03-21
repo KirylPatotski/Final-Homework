@@ -1,6 +1,5 @@
-package com.homework.app.mvp.service
+package com.homework.app.mvp
 
-import com.homework.app.mvvw.data.artist.ArtistsResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,16 +24,11 @@ class LastFMNetworkImpl private constructor() : LastFMNetwork {
             if (instance == null) {
                 instance = LastFMNetworkImpl()
             }
-
             return instance!!
         }
     }
 
     init {
-        initService()
-    }
-
-    private fun initService() {
         val bodyInterceptor = HttpLoggingInterceptor()
         val headersInterceptor = HttpLoggingInterceptor()
         bodyInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -54,6 +48,7 @@ class LastFMNetworkImpl private constructor() : LastFMNetwork {
         artistsService = retrofit.create(ArtistsService::class.java)
     }
 
+
     override fun getArtistsService(): ArtistsService = artistsService
 }
 
@@ -72,5 +67,4 @@ interface ArtistsService {
         @Query("api_key") apiKey: String = KEY_API_KEY,
         @Query("format") format: String = KEY_FORMAT,
     ): ArtistsResponse
-//    https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=a35699f435445486aec22d7a19e652bf&format=json
 }

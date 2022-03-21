@@ -1,4 +1,4 @@
-package com.homework.app.mvvw.ui.auth
+package com.homework.app.mvvw.ui.login
 
 import android.content.Context
 import android.os.Bundle
@@ -6,26 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.homework.app.R
-import com.homework.app.mvvw.data.AppPreferencesImpl
+import com.homework.app.mvvw.AppPreferencesImpl
 import com.homework.app.mvvw.ui.main.MainActivity
 import com.homework.app.mvvw.ui.music.fragment.MusicFragment
 import java.io.File
 
-class AuthFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private lateinit var progress: ProgressBar
+
     private lateinit var overlay: FrameLayout
     private lateinit var emailField: TextInputLayout
     private lateinit var passwordField: TextInputLayout
@@ -41,11 +39,7 @@ class AuthFragment : Fragment() {
         )
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_login, container, false)
     }
 
@@ -59,10 +53,14 @@ class AuthFragment : Fragment() {
         passwordField = view.findViewById(R.id.input_layout_password)
         confirmField = view.findViewById(R.id.input_confirm_password)
         overlay = view.findViewById(R.id.overlay_container)
-        progress = view.findViewById(R.id.progress)
         titleText = view.findViewById(R.id.title_text)
         saveCredentialsCheckBox = view.findViewById(R.id.save_credentials_check_box)
 
+        setListeners()
+        subscribeOnLiveData()
+    }
+
+    private fun setListeners() {
         if (emailField.editText?.text?.isBlank() == true) {
             ContextCompat.getColorStateList(requireContext(), R.color.white)?.let {
                 emailField.setBoxStrokeColorStateList(it)
@@ -74,24 +72,9 @@ class AuthFragment : Fragment() {
 
 
         }
-
-
-
-        setListeners()
-        subscribeOnLiveData()
-    }
-
-    private fun setListeners() {
         emailField.editText?.addTextChangedListener {
             it?.let {
                 viewModel.setUpdatedEmail(it.toString())
-//                if (it.isBlank()) {
-//                    ContextCompat.getColorStateList(requireContext(), R.color.auth_input_layout_stroke_color_default)?.let { colorList ->
-//                        loginField.setBoxStrokeColorStateList(colorList)
-//                }
-//            } else {
-//                    ContextCompat.g1etColorStateList(requireContext(), R.color.auth_input_layout_stroke_color)?.let { colorList ->
-//                        loginField.setBoxStrokeColorStateList(colorList)
             }
         }
 
@@ -102,16 +85,7 @@ class AuthFragment : Fragment() {
             val emailText = emailField.editText?.text.toString()
             val passwordText = passwordField.editText?.text.toString()
             viewModel.onLoginClicked(emailText, passwordText)
-            viewModel.saveCredentialsToFile(
-                emailText,
-                passwordText,
-                File(
-                    requireActivity().getDir(
-                        "credentials",
-                        Context.MODE_PRIVATE
-                    ).absolutePath + "/" + "credentials.txt"
-                )
-            )
+            viewModel.saveCredentialsToFile(emailText,passwordText,File(requireActivity().getDir("credentials",Context.MODE_PRIVATE).absolutePath + "/" + "credentials.txt"))
         }
         saveCredentialsCheckBox.setOnCheckedChangeListener { _, selected ->
             viewModel.setSaveCredentialsSelected(selected)
@@ -131,15 +105,6 @@ class AuthFragment : Fragment() {
             Toast.makeText(context, "Something went wrong. Please, retry!", Toast.LENGTH_LONG)
                 .show()
         })
-        viewModel.showProgressLiveData.observe(viewLifecycleOwner, {
-            showProgress()
-        })
-        viewModel.hideProgressLiveData.observe(viewLifecycleOwner, {
-            hideProgress()
-        })
-        viewModel.titleLiveData.observe(viewLifecycleOwner, { title ->
-            titleText?.text = title
-        })
         viewModel.saveCredentialsCheckedLiveData.observe(viewLifecycleOwner, { isSelected ->
             saveCredentialsCheckBox.isChecked = isSelected
         })
@@ -153,14 +118,5 @@ class AuthFragment : Fragment() {
         })
     }
 
-    private fun hideProgress() {
-        progress.isVisible = false
-        overlay.isVisible = false
-    }
-
-    private fun showProgress() {
-        progress.isVisible = true
-        overlay.isVisible = true
-    }
-}
+} 
 

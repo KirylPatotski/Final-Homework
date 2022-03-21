@@ -1,11 +1,11 @@
-package com.omisoft.app.mvvw.ui.music.favorite
+package com.homework.app.mvvw.ui.music.favorite.draft
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.omisoft.app.R
+import com.homework.app.R
 
 
 class FavoriteFragment() : Fragment() {

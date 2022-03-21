@@ -1,4 +1,4 @@
-package com.homework.app.mvvw.data
+package com.homework.app.mvp
 
 import com.google.gson.annotations.SerializedName
 

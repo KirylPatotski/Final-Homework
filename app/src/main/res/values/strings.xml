@@ -1,42 +1,16 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="auth_login">Login</string>
-    <string name="auth_password">Password</string>
-    <string name="auth_save_credentials">Save credentials</string>
 
-    <string name="list_finish">Finish</string>
-    <string name="list_open_url">Open URL</string>
-    <string name="list_open_file_picker">Open FilePicker</string>
-    <string name="list_log_out">Logout</string>
+    <string name="app_name">Final Homework</string>
+    <string name="Email" translatable="false">Email</string>
+    <string name="Password">Password</string>
+    <string name="Save_Login">Save login</string>
+    <string name="Success">Success</string>
+    <string name="error">If you see this text, than you have no favorites. \nPress the text field to get the storage location of your favorites</string>
+    <string name="Favorite" translatable="false">Favorite</string>
+    <string name="exit">Exit</string>
+    <string name="open_url">Open URL</string>
+    <string name="open_browser">Open Browser</string>
+    <string name="open_favorite">Open Favorite</string>
 
-    <string name="success_message">Success</string>
 
-    <string name="browser_view_url">View URL</string>
-
-    <string name="file_picker_open">Open</string>
-
-    <string name="open_time_picker">Open time picker</string>
-
-    <string name="notification_name">Message notifications</string>
-    <string name="notification_description">Notifications about new messages</string>
-
-    <string name="notification_name_alarm">Alarm notifications</string>
-    <string name="notification_description_alarm">Notifications about new alarms</string>
-
-    <string name="notification_name_progress">Progress notifications</string>
-    <string name="notification_description_progress">Notifications that notifies us about progress</string>
-
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
-
-    <string name="home_weather_widget_city_text">City: %1$s</string>
-    <string name="home_weather_widget_temperature_text">Temperature: %1$s °C</string>
-    <string name="home_weather_widget_humidity_text">Humidity: %1$s %%</string>
-    <string name="home_weather_widget_open_success_text">Open success</string>
-    <string name="home_weather_widget_open_mvp_text">Open mvp</string>
-
-    <string name="location_fragment_passed_distance">Passed distance: %1$s</string>
-    <string name="location_fragment_calculate_distance">Calculate distance</string>
-    <string name="location_fragment_clear_polyline">Clear polyline</string>
 </resources>

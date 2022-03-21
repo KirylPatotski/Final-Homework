@@ -1,4 +1,4 @@
-package com.homework.app.mvvw.data
+package com.homework.app.mvvw
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,7 +10,7 @@ class AppPreferencesImpl private constructor() : AppPreferences {
         private const val PREFERENCE_LOGIN = "PREFERENCE_LOGIN"
         private const val PREFERENCE_PASSWORD = "PREFERENCE_PASSWORD"
         private const val PREFERENCE_TOKEN = "PREFERENCE_TOKEN"
-        private const val FAVORITE_TOKEN = "PREFERENCE_TOKEN"
+        private const val PREFERENCE_FAVORITE = "PREFERENCE_TOKEN"
 
         private var instance: AppPreferences? = null
         private var settings: SharedPreferences? = null
@@ -48,10 +48,10 @@ class AppPreferencesImpl private constructor() : AppPreferences {
 
 
     override fun saveFavorite(str: String) {
-        settings?.edit()?.putString(PREFERENCE_PASSWORD, str.toString())?.apply() ?: Unit
+        settings?.edit()?.putString(PREFERENCE_FAVORITE, str.toString())?.apply() ?: Unit
     }
 
-    override fun getFavorite(): String? = settings?.getString(FAVORITE_TOKEN,"") ?: ""
+    override fun getFavorite(): String? = settings?.getString(PREFERENCE_FAVORITE,"") ?: ""
 }
 
 interface AppPreferences {

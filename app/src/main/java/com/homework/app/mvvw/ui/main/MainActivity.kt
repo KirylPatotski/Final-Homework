@@ -1,12 +1,13 @@
-package com.homework.app
+package com.homework.app.mvvw.ui.main
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.homework.app.mvvw.data.storage.AppPreferencesImpl
-import com.homework.app.mvvw.ui.auth.fragment.AuthFragment
+import com.homework.app.R
+import com.homework.app.mvvw.AppPreferencesImpl
+import com.homework.app.mvvw.ui.login.LoginFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,17 +21,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        supportActionBar?.hide()
         listenNavigationEvents()
-
+        //setting Fragment
         if (savedInstanceState == null) {
             if (AppPreferencesImpl.getInstance(this).getToken().isBlank()) {
-//                openFragment(MusicFragment(), tag = "AuthFragment")
-//                openFragment(AuthFragment(), tag = "AuthFragment")
-                openFragment(AuthFragment(), tag = "AuthFragment")
+                openFragment(LoginFragment(), tag = "Fragment")
             } else {
-//                openFragment(MusicFragment(), tag = "MusicFragment")
-                openFragment(AuthFragment(), tag = "MusicFragment")
+                openFragment(LoginFragment(), tag = "Fragment")
             }
         }
 
@@ -42,14 +40,11 @@ class MainActivity : AppCompatActivity() {
         if (fragmentCount > 1) {
             super.onBackPressed()
         } else {
-            finish()
+            System.exit(0)
+            println(0/0)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
 
     fun openFragment(fragment: Fragment, doClearBackStack: Boolean = false, tag: String? = null) {
         if (doClearBackStack) {
@@ -61,8 +56,6 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
-
-    fun findFragmentByTag(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
 
     private fun clearBackStack() {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
