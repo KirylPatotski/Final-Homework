@@ -40,7 +40,8 @@ class MusicFragment : Fragment() {
         openButton = view.findViewById(R.id.open_browser_button)
         recyclerArtists = view.findViewById(R.id.recycler_artists)
         recyclerArtists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        //unfortunately INT.MAX_VALUE as edgeOffset does not work
+
+        //unfortunately INT.MAX_VALUE as edgeOffset does not work there are only 50 artist or so
         recyclerArtists.addItemDecoration(ArtistsRecyclerClass(100))
         textfield = view.findViewById(R.id.favoriteTextView)
 
@@ -53,14 +54,13 @@ class MusicFragment : Fragment() {
 
         textfield.setOnClickListener{
             favorite = FavoriteInfo()
-            var b = Adapter.ViewHolder.favorite
-            var Text = b.toString()
-            textfield.text = Text
+            var adapterCompanionObject = Adapter.ViewHolder.favorite
+            var textFieldText = adapterCompanionObject.toString()
+            textfield.text = textFieldText
 
         }
-
         openButton.setOnClickListener {
-            (activity as MainActivity).openFragment(BrowserFragment(), doClearBackStack = true)
+            (activity as MainActivity).openFragment(BrowserFragment(), doClearBackStack = false)
         }
 
     }

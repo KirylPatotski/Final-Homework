@@ -32,12 +32,7 @@ class LoginFragment : Fragment() {
     private lateinit var saveCredentialsCheckBox: AppCompatCheckBox
     private var titleText: AppCompatTextView? = null
 
-    private val viewModel by viewModels<AuthVariables> {
-        AuthViewModelFactory(
-            Authentication() as Authentication,
-            AppPreferencesImpl.getInstance(requireContext())
-        )
-    }
+    private val viewModel by viewModels<AuthVariables> {AuthViewModelFactory(LoginValid() as LoginValid, AppPreferencesImpl.getInstance(requireContext())) }
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_login, container, false)
@@ -46,7 +41,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchStoredData()
+
 
         buttonLogin = view.findViewById(R.id.button_login)
         emailField = view.findViewById(R.id.input_layout_login)
@@ -56,22 +51,19 @@ class LoginFragment : Fragment() {
         titleText = view.findViewById(R.id.title_text)
         saveCredentialsCheckBox = view.findViewById(R.id.save_credentials_check_box)
 
+        viewModel.fetchStoredData()
+
         setListeners()
         subscribeOnLiveData()
     }
 
     private fun setListeners() {
-        if (emailField.editText?.text?.isBlank() == true) {
-            ContextCompat.getColorStateList(requireContext(), R.color.white)?.let {
-                emailField.setBoxStrokeColorStateList(it)
-            }
-        } else {
-            ContextCompat.getColorStateList(requireContext(), R.color.white)?.let { colorList ->
-                emailField.setBoxStrokeColorStateList(colorList)
-            }
+
+        setColors(emailField)
+        setColors(confirmField)
+        setColors(passwordField)
 
 
-        }
         emailField.editText?.addTextChangedListener {
             it?.let {
                 viewModel.setUpdatedEmail(it.toString())
@@ -81,12 +73,15 @@ class LoginFragment : Fragment() {
         passwordField.editText?.addTextChangedListener {
             viewModel.setUpdatedPassword(it.toString())
         }
+
+
         buttonLogin.setOnClickListener {
             val emailText = emailField.editText?.text.toString()
             val passwordText = passwordField.editText?.text.toString()
             viewModel.onLoginClicked(emailText, passwordText)
-            viewModel.saveCredentialsToFile(emailText,passwordText,File(requireActivity().getDir("credentials",Context.MODE_PRIVATE).absolutePath + "/" + "credentials.txt"))
+            viewModel.writeFile(emailText,passwordText,File(requireActivity().getDir("credentials",Context.MODE_PRIVATE).absolutePath + "/" + "credentials.txt"))
         }
+
         saveCredentialsCheckBox.setOnCheckedChangeListener { _, selected ->
             viewModel.setSaveCredentialsSelected(selected)
         }
@@ -95,15 +90,10 @@ class LoginFragment : Fragment() {
 
     private fun subscribeOnLiveData() {
         viewModel.isLoginSuccessLiveData.observe(viewLifecycleOwner, {
-            (activity as MainActivity).openFragment(
-                MusicFragment(),
-                doClearBackStack = true,
-                tag = "MusicFragment"
-            )
+            (activity as MainActivity).openFragment(MusicFragment(),doClearBackStack = true, tag = "MusicFragment")
         })
         viewModel.isLoginFailedLiveData.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "Something went wrong. Please, retry!", Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(context, "Something went wrong.", Toast.LENGTH_LONG).show()
         })
         viewModel.saveCredentialsCheckedLiveData.observe(viewLifecycleOwner, { isSelected ->
             saveCredentialsCheckBox.isChecked = isSelected
@@ -116,6 +106,19 @@ class LoginFragment : Fragment() {
             passwordField.editText?.setText(password)
             passwordField.editText?.setSelection(password.length)
         })
+    }
+
+    fun setColors(field: TextInputLayout){
+        if (field.editText?.text?.isBlank() == true) {
+            ContextCompat.getColorStateList(requireContext(), R.color.white)?.let {
+                field.setBoxStrokeColorStateList(it)
+            }
+        } else {
+            ContextCompat.getColorStateList(requireContext(), R.color.white)?.let { colorList ->
+                field.setBoxStrokeColorStateList(colorList)
+            }
+        }
+
     }
 
 } 

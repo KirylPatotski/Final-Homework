@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.homework.app.mvvw.AppPreferences
 import java.io.*
 
-class AuthVariables(
-    private val authModel: Authentication,
-    private val preferences: AppPreferences,
-) : ViewModel(), LifecycleObserver {
+class AuthVariables(private val authModel: LoginValid, private val preferences: AppPreferences,) : ViewModel(), LifecycleObserver {
 
     companion object {
         private const val TAG = "AuthViewModel"
@@ -45,28 +42,26 @@ class AuthVariables(
         preferences.setSaveCredentialsSelected(isSelected)
     }
 
-    fun saveCredentialsToFile(email: String, password: String, file: File) {
-        var fos: FileOutputStream? = null
-
+    fun writeFile(email: String, password: String, file: File) {
+        var fileOutputStream: FileOutputStream? = null
         try {
             file.createNewFile()
-
-            fos = FileOutputStream(file)
-            fos.write("$email, $password".toByteArray())
+            fileOutputStream = FileOutputStream(file)
+            fileOutputStream.write("$email, $password".toByteArray())
         } catch (error: Exception) {
-            Log.e(TAG, error.message ?: "")
+            println("Something went wrong")
         } finally {
-            fos?.close()
-            getCredentialsFromFile(file)
+            fileOutputStream?.close()
+            readFile(file)
         }
     }
 
-    private fun getCredentialsFromFile(file: File) {
-        var fis: FileInputStream? = null
+    private fun readFile(file: File) {
+        var fileInputStream: FileInputStream? = null
 
         try {
-            fis = FileInputStream(file)
-            val isr = InputStreamReader(fis)
+            fileInputStream = FileInputStream(file)
+            val isr = InputStreamReader(fileInputStream)
             val bsr = BufferedReader(isr)
             val stringBuilder = StringBuilder()
             val iterator = bsr.lineSequence().iterator()
@@ -83,7 +78,7 @@ class AuthVariables(
         } catch (error: Exception) {
             Log.e(TAG, error.message ?: "")
         } finally {
-            fis?.close()
+            fileInputStream?.close()
         }
     }
 
@@ -104,8 +99,9 @@ class AuthVariables(
         preferences.let {
             if (it.isSaveCredentialsSelected()) {
                 emailLiveData.postValue(it.getLogin())
-                passwordLiveData.postValue(it.getPassword())
-                confirmLiveData.postValue(it.getPassword())
+                var password = it.getPassword()
+                passwordLiveData.postValue(password)
+                confirmLiveData.postValue(password)
                 saveCredentialsCheckedLiveData.postValue(true)
             }
         }
@@ -118,6 +114,12 @@ class AuthVariables(
     }
 
     fun setUpdatedPassword(password: String) {
+        if (password != passwordLiveData.value) {
+            passwordLiveData.value = password
+        }
+    }
+
+    fun setUpdatedConfirm(password: String) {
         if (password != passwordLiveData.value) {
             passwordLiveData.value = password
         }
@@ -146,16 +148,12 @@ fun String?.isPasswordValid(): Boolean {
 }
 
 @Suppress("UNCHECKED_CAST")
-class AuthViewModelFactory(
-    private val authModel: Authentication,
-    private val preferences: AppPreferences,
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (AuthVariables(authModel, preferences) as T)
+class AuthViewModelFactory(private val authModel: LoginValid, private val preferences: AppPreferences, ) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) = (AuthVariables(authModel, preferences) as T)
 }
 
 
-class Authentication {
+class LoginValid {
 
     fun onLoginClicked(email: String, password: String, confirm: String): String? {
         val isEmailValid = email.isEmailValid()
