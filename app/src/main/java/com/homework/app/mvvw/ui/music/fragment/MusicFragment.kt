@@ -59,9 +59,11 @@ class MusicFragment : Fragment() {
             textfield.text = textFieldText
 
         }
+
         openButton.setOnClickListener {
             (activity as MainActivity).openFragment(BrowserFragment(), doClearBackStack = false)
         }
+
 
     }
 

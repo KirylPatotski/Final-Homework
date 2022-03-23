@@ -42,16 +42,28 @@
         app:layout_constraintTop_toBottomOf="@id/image"
         />
 
+
     <Button
         android:id="@+id/heart_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="❤"
+        android:text="♥"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias=".9"
+        app:layout_constraintStart_toEndOf="@id/url_adapter_button"
         app:layout_constraintTop_toBottomOf="@id/artist_name" />
 
+    <Button
+        android:id="@+id/url_adapter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="URL"
+        app:layout_constraintEnd_toStartOf="@id/heart_button"
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/artist_name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/artist_count"
